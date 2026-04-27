@@ -14,7 +14,7 @@
     "express": "^5.2.1",
     "socket.io": "^4.8.3"
   }
-}
+
 {
   "name": "my-crossword-game",
   "version": "1.0.0",
