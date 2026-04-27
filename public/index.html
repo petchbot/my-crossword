@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>X-Link Words</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        body { font-family: sans-serif; text-align: center; background: #f0f2f5; }
+        .grid { display: grid; grid-template-columns: repeat(5, 60px); gap: 10px; justify-content: center; margin-top: 50px; }
+        input { width: 60px; height: 60px; text-align: center; font-size: 30px; border-radius: 10px; border: 2px solid #ddd; }
+    </style>
+</head>
+<body>
+    <h1>X-Link Words 🧩</h1>
+    <p>ลองพิมพ์ตัวอักษร แล้วเปิดอีกหน้าต่างดูนะ!</p>
+    <div id="board" class="grid"></div>
+
+    <script>
+        const socket = io();
+        const roomId = "room-1"; // เดี๋ยวเราจะทำระบบแชร์ลิงก์ให้เปลี่ยนห้องได้ทีหลัง
+        socket.emit('join-room', roomId);
+
+        const board = document.getElementById('board');
+        for (let i = 0; i < 25; i++) {
+            const el = document.createElement('input');
+            el.id = 'cell-' + i;
+            el.oninput = () => {
+                socket.emit('move', { roomId, id: i, val: el.value });
+            };
+            board.appendChild(el);
+        }
+
+        socket.on('update', (data) => {
+            document.getElementById('cell-' + data.id).value = data.val;
+        });
+    </script>
+</body>
+</html>
